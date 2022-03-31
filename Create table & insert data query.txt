@@ -1,0 +1,118 @@
+DROP TABLE PROMOTION;
+
+CREATE TABLE PROMOTION
+(Promotion_Code int NOT NULL,
+Promo_Name varchar2 (30) NOT NULL,
+Discount Percentage number(10,2) NOT NULL,
+StartDate date,
+EndDate date,
+	 CONSTRAINT Promotion_PromotionCode#_pk PRIMARY KEY(Promotion_Code));
+
+INSERT INTO PROMOTION
+VALUES(1225,'Chirstmas' ,0.8,'12/18/2021','12/31/2021');
+INSERT INTO PROMOTION
+VALUES(0314,'Valentines Day',0.7,'02/07/2022','02/21/2022');
+INSERT INTO PROMOTION
+VALUES(0808,'Father Day',0.88,'08/01/2021','08/15/2021');
+INSERT INTO PROMOTION
+VALUES(1111,'Remember Day',0.9,'11/05/2021','11/19/2021');
+
+//
+CREATE TABLE CUSTOMER_INFO
+(Customer_Id  NUMBER(4),
+FirstName VARCHAR2(10) NOT NULL,
+LastName VARCHAR2(10) NOT NULL,
+Phone NUMBER(10)NOT NULL,
+Email VARCHAR2(30)NOT NULL,
+Address VARCHAR2(20),
+City VARCHAR2(10),
+State VARCHAR2(4),
+Zip VARCHAR2(6),
+  CONSTRAINT Customer_CustomerID_pk PRIMARY KEY(customer_Id));
+  
+INSERT INTO CUSTOMER_INFO
+VALUES (0001, 'RICK', 'CHEN', 7789991234, 'rick@gmail.com', '2020 41Ave', 'Vancouver', 'BC', 'V5R3E4');
+INSERT INTO CUSTOMER_INFO
+VALUES (0002, 'TONY', 'LEE', 6047771234, 'tony@gmail.com', '2020 cambi', 'Vancouver', 'BC', 'V5R3E5');
+INSERT INTO CUSTOMER_INFO
+VALUES (0032, 'ERIC', 'ROSS', 6047776688, 'eric@gmail.com', '2020 victoria', 'Vancouver', 'BC', 'V5R4E2');
+INSERT INTO CUSTOMER_INFO
+VALUES (0003, 'Maggie', 'ROSS', 7889995201, 'maggie@gmail.com', '2020 Hasting', 'Burnaby', 'BC', 'V6R3B2');
+
+//
+CREATE TABLE CAR_INFO
+(Car_Id int NOT NULL,
+PlateNumber varchar2 (6) NOT NULL,
+CarModel_Year varchar2 (15) NOT NULL,
+Brand varchar2 (10),
+Color varchar2 (10),
+Capacity number(1),
+AirBag number(1),
+Door number(1),
+VechicleClass varchar2(10),
+UnitePrice number(10,2),
+CONSTRAINT CAR_INFO_CarId_pk PRIMARY KEY(Car_Id));
+
+INSERT INTO CAR_INFO
+VALUES (001,'abc123','Durango2021','Dodge','Black',7,5,4,'SUV',166.99);
+INSERT INTO CAR_INFO
+VALUES (002,'DFG123','Sonata2020','Hyundai','Black',5,3,4,'Standard',38.99);
+INSERT INTO CAR_INFO
+VALUES (003,'QOO666','Mirage 2020','Mitsubishi','Black',4,2,4,'Economy',30.99);
+INSERT INTO CAR_INFO
+VALUES (004,'BMW666','X6 2021', 'BMW','Black',5,6,5, 'SUV',200);
+
+
+
+//
+CREATE TABLE CAR_STATUS
+(Car_Id int NOT NULL,
+Avaliable varchar2 (5) NOT NULL,
+StartDate date,
+EndDate date,
+Remark varchar2(60),
+	 CONSTRAINT CAR_STATUS_CarId_pk PRIMARY KEY(Car_Id),
+	  CONSTRAINT CAR_STATUS_CarId_fk FOREIGN KEY (Car_Id)
+    REFERENCES CAR_INFO(Car_Id));
+	
+INSERT INTO CAR_STATUS (Car_Id,Avaliable)
+VALUES(001,'YES');
+INSERT INTO CAR_STATUS (Car_Id,Avaliable)
+VALUES(002,'YES');
+INSERT INTO CAR_STATUS 
+VALUES(003,'NO','11/29/2021','12/02/2021','Need to check tire');
+INSERT INTO CAR_STATUS 
+VALUES(004,'NO','11/10/2021','12/10/2021','NULL');
+	
+	
+//
+CREATE TABLE INVOICE
+(Invoice_Number int NOT NULL,
+Customer_Id number (4) NOT NULL,
+Invoice_Date date NOT NULL,
+Car_Id int NOT NULL,
+Description varchar2 (100),
+UnitePrice number(10,2) NOT NULL,
+StartDate date NOT NULL,
+EndDate date NOT NULL,
+Promotion_Code int,
+Discount number(10,2),
+Tax number(10,2) NOT NULL,
+Total_Charge number (10,2) NOT NULL,
+PRIMARY KEY (Invoice_NUmber),
+CONSTRAINT invoice_customerId_fk FOREIGN KEY (Customer_Id) REFERENCES CUSTOMER_INFO (Customer_Id), 
+CONSTRAINT invoice_carId_fk FOREIGN KEY (Car_Id) REFERENCES CAR_INFO (Car_Id),
+CONSTRAINT invoice_promoCode_fk FOREIGN KEY (Promotion_Code) REFERENCES PROMOTION (Promotion_Code));
+
+
+INSERT INTO INVOICE 
+VALUES(10193,0002,'10/10/2021',001,'Two days, no discount',166.99,'10/10/2021','10/11/2021',NULL,NULL ,40.07,374.05);
+INSERT INTO INVOICE 
+VALUES(10195,0003,'11/10/2021',004,'Have 10 days discount',200,'11/10/2021','12/10/2021',1111,200,720,6720);
+INSERT INTO INVOICE 
+VALUES(10198,0001,'11/29/2021',003,'Four days',30.99,'11/29/2021','12/02/2021',NULL,NULL ,14.87,138.83);
+
+
+
+	
+	
