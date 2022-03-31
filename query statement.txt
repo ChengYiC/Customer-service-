@@ -1,0 +1,60 @@
+
+--SELECT queries	
+--A select query that utilizes a subquery
+SELECT CAR_ID, CARMODEL_YEAR, UnitePrice
+FROM CAR_INFO
+WHERE UnitePrice >ALL (SELECT FROM CAR_INFO WHERE UnitePrice < 100);
+
+--A select query that demonstrates the use of group by with having clause and sorts the data in a descending format.
+SELECT CAR_ID, TO_CHAR(SUM(TOTAL_CHARGE)) "This car earnd this much(only show which over 300 dollors) for company"
+FROM INVOICE
+GROUP BY CAR_ID
+HAVING SUM(TOTAL_CHARGE) > 300;
+
+--A select queries that demonstrates the use of group by with aggregate functions.
+SELECT COLOR, SUM(UnitePrice) "SUM of car unite price by color"
+FROM CAR_INFO
+GROUP BY COLOR;
+
+SELECT PROMO_NAME, COUNT(*)
+FROM PROMOTION
+GROUP BY PROMO_NAME
+
+--A select query that extracts fields from two or more tables and uses a pattern search as a filter
+SELECT *
+FROM
+	CUSTOMER_INFO, INVOICE
+	WHERE CUSTOMER_INFO.CUSTOMER_ID = INVOICE.CUSTOMER_ID
+	and LASTNAME LIKE 'C%';
+
+--A select query that extract fields from two or more tables and uses a condition to filter query results
+SELECT INVOICE.INVOICE_NUMBER, INVOICE.CUSTOMER_ID, CUSTOMER_INFO.FIRSTNAME, CUSTOMER_INFO.LASTNAME
+FROM
+	CUSTOMER_INFO, INVOICE
+	WHERE CUSTOMER_INFO.CUSTOMER_ID = INVOICE.CUSTOMER_ID
+	and INVOICE = 3 ;
+	
+
+--update query
+UPDATE CAR_INFO
+SET UnitePrice = UnitePrice*2;
+
+UPDATE CAR_INFO
+SET Color = 'Grey'
+WHERE CAR_ID = 0003;
+
+ALTER TABLE CAR_INFO
+MODIFY UnitePrice number(10,2) NOT NULL;
+
+--delete query
+DELETE
+FROM
+    PROMOTION
+WHERE
+    PROMOTION_CODE = 314;
+	
+DELETE
+FROM
+    CUSTOMER_INFO
+WHERE
+    FIRSTNAME = 'ERIC';
